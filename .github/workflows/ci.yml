@@ -4,6 +4,7 @@ permissions:
 
 on:
   push:
+  workflow_dispatch:
   pull_request:
 
 env:
@@ -16,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ "ubuntu-latest", "ubuntu-22.04-arm", "windows-latest" ]
+        os: [ "ubuntu-latest", "ubuntu-22.04-arm", "windows-latest", "macos-latest" ]
         database: [ "h2", "postgresql", "mysql", "mariadb" ]
 
     runs-on: ${{ matrix.os }}
@@ -43,7 +44,7 @@ jobs:
 
       - name: Install Playwright dependencies
         run: sudo apt-get install -y libgbm1
-        if: matrix.os != 'windows-latest'
+        if: runner.os == 'Linux'
 
       # Build & Test
       - name: Build with Maven
